@@ -8,6 +8,7 @@
             font-family: Arial, sans-serif;
             font-size: 14px;
             color: #000;
+            padding-left: 15px;            
         }
 
         input::placeholder {
@@ -32,21 +33,38 @@
         .dateortine {
             display: flex;
             flex-direction: row;
-            gap: 10px;
+            
             justify-content: space-between;
             margin-bottom: 10px;
         }
 
         .dateortine button, .month-buttons button {
+            flex: 1;
             font-size: 14px;
             padding: 5px 10px;
             cursor: pointer;
+            float: left;
+            border: none;
+           
+        }
+
+        .dateortine img{
+           
+            width: 10px;
+            height: 10px;
+            margin-right: 8px;
+        }
+
+        .dateortine img::selecte {
+            background-color: #2110b6 ;
         }
 
         .month-buttons {
             display: flex;
             justify-content: space-between;
-            margin: 10px 0;
+            margin: 10px;           
+            padding: 0;
+
         }
 
         .days-of-week {
@@ -91,6 +109,31 @@
             gap: 5px;
         }
 
+        .input-container {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding-right: 15px;
+            width: 300px;
+            height: 40px;
+        }
+
+        .input-container input {
+            flex: 1;
+            border: none;
+            outline: none;
+
+        }
+
+        .input-container img {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+
+
         .empty {
             visibility: hidden; /* Hide empty cells at the beginning of the month */
         }
@@ -100,10 +143,13 @@
     <title>Custom Date Picker</title>
 </head>
 <body>
+    <div class="input-container">
     <input type="text" class="date" placeholder="DD.MM.YYYY - HH:MM" disabled inputmode="">
+    <img src="datepick1.png">
+    </div>
     <div class="root">
         <div class="dateortine">
-            <button id="dateBtn">Date</button>
+            <button id="dateBtn"><img src="timeIcon.png" alt="time">Date</button>
             <button id="timeBtn">Time</button>
         </div>
     <div id="datepicker" hidden>
