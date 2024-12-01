@@ -137,6 +137,20 @@
         .empty {
             visibility: hidden; /* Hide empty cells at the beginning of the month */
         }
+
+        .year{
+            position: relative;
+            display: inline-block;
+            font-size: 16px;
+            border: none;
+        }
+
+        .year select:focus {
+            outline: none;
+            border: none; /* Keret semmilyen fókusz esetén */
+        }
+
+
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -149,16 +163,16 @@
     </div>
     <div class="root">
         <div class="dateortine">
-            <button id="dateBtn"><img src="timeIcon.png" alt="time">Date</button>
-            <button id="timeBtn">Time</button>
+            <button id="dateBtn"><img src="calIcon.png" alt="time">Date</button>
+            <button id="timeBtn"><img src="timeIcon.png">Time</button>
         </div>
     <div id="datepicker" hidden>
 
 
         <!-- Month Navigation -->
         <div id="month" class="month-buttons">
-            <button id="prevMonthBtn">&lt;</button>
             <select class="year" id="yearSelect"></select>
+            <button id="prevMonthBtn">&lt;</button>            
             <button id="nextMonthBtn">&gt;</button>
         </div>
 
