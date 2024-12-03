@@ -16,13 +16,13 @@
             margin-left: 20px;
         }
 
-        .datepicker {
+        .datepicker-container {
             height: 350px;
             width: 250px;
-            border: 2px solid rgb(118, 114, 119);
-            display: flex;
             flex-direction: column;
             padding: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+
         }
 
         .root{
@@ -48,6 +48,17 @@
            
         }
 
+        .dateortine button:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Selected State */
+        .dateortine button.selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+
         .dateortine img{
            
             width: 10px;
@@ -64,16 +75,18 @@
             justify-content: space-between;
             margin: 10px;           
             padding: 0;
-
+            
         }
 
         .days-of-week {
             display: grid;
             grid-template-columns: repeat(7, 1fr); /* 7 columns for the days of the week */
             gap: 5px;
-            font-weight: bold;
+            font-weight: normal;
             text-transform: uppercase;
             margin-bottom: 10px;
+            text-align: center;
+            
         }
 
         .day {
@@ -82,7 +95,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f1f1f1;
+            background-color: #FFFFFF;
             border-radius: 5px;
             cursor: pointer;
             text-align: center;
@@ -97,11 +110,17 @@
             color: white;
         }
 
-        .day-of-week {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-        }
+        /* Faded style for previous days and week headers */
+.faded {
+    color: rgba(0, 0, 0, 0.4); /* Faded text color */
+}
+
+.day.past {
+    color: rgba(0, 0, 0, 0.4); /* Faded color for past days */
+}
+
+
+  
 
         .days-of-month {
             display: grid;
@@ -143,12 +162,60 @@
             display: inline-block;
             font-size: 16px;
             border: none;
+            font-family: Arial;
         }
 
         .year select:focus {
             outline: none;
             border: none; /* Keret semmilyen fókusz esetén */
         }
+
+/* Style for days-of-week container with single underline */
+.days-of-week {
+    display: flex;
+    justify-content: space-around; /* Space out days evenly */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5); /* Single underline for all days */
+    padding-bottom: 5px; /* Space between text and underline */
+}
+
+/* Faded style for each day anagram */
+.days-of-week .day-of-week {
+    color: rgba(0, 0, 0, 0.5); /* Faded text color */
+    text-align: center;
+    flex: 1; /* Equal spacing for all days */
+}
+
+
+/* Style for days that have passed */
+.day.disabled {
+    color: rgba(0, 0, 0, 0.3); /* Faded black for passed days */
+    cursor: not-allowed;
+    pointer-events: none; /* Disable click events */
+    background-color: rgb(255, 255, 255); /* Optional: Gray background */
+}
+
+.clock-container{
+box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.confirm-buttons {
+    display: flex;
+    justify-content: space-between; /* Push buttons to opposite sides */
+    margin: 10px;
+    padding: 0;
+}
+
+.confirm-buttons button {
+    border: none; /* Make borders invisible */
+    background: none; /* Optional: Remove background styling */
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.confirm-buttons button:hover{
+    background-color: #ddd;
+}
+
 
 
     </style>
@@ -166,7 +233,7 @@
             <button id="dateBtn"><img src="calIcon.png" alt="time">Date</button>
             <button id="timeBtn"><img src="timeIcon.png">Time</button>
         </div>
-    <div id="datepicker" hidden>
+    <div id="datepicker" class="datepicker-container" hidden>
 
 
         <!-- Month Navigation -->
@@ -181,6 +248,14 @@
 
         <!-- Days of the month will be displayed here -->
         <div class="days-of-month" id="daysOfMonth"></div>
+
+        <div class="confirm-container">
+            <div class="confirm-buttons">
+                <button id="cancelBtn"><img src="clearBtn.png" alt="time">Clear</button>
+                <button id="okBtn"><img src="okayBtn.png">Ok</button>
+            </div>
+        </div>
+
         </div>
     
 
@@ -191,6 +266,18 @@
 
 
     <script>
+
+const dateortine = document.getElementById('dateortine');
+
+// Add event listener to the container (event delegation)
+dateortine.addEventListener('click', (event) => {
+    // Check if the clicked element is a button
+    if (event.target.tagName === 'BUTTON') {
+        // Toggle the 'selected' class for the clicked button
+        event.target.classList.toggle('selected');
+    }
+});
+
         let currentYear, currentMonth;
 
         const months = [
@@ -220,46 +307,56 @@
             yearSelect.value = `${months[currentMonth]} ${currentYear}`;
         }
 
-        // Function to generate the days of the week (one letter, capitalized)
-        function generateDaysOfWeek() {
-            const daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"]; // First letter of each day
-            const daysOfWeekDiv = document.getElementById('daysOfWeek');
-            
-            // Add the day names in capital letters
-            daysOfWeek.forEach(day => {
-                const dayDiv = document.createElement('div');
-                dayDiv.classList.add('day-of-week');
-                dayDiv.textContent = day;
-                daysOfWeekDiv.appendChild(dayDiv);
-            });
-        }
-
-        // Function to generate the days of the current month
         function generateDaysOfMonth() {
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // Get the last day of the current month
-            const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // Get the day of the week of the first day of the month
+    const today = new Date(); // Get today's date
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
-            const daysOfMonthDiv = document.getElementById('daysOfMonth');
-            daysOfMonthDiv.innerHTML = ''; // Clear previous content
+    const daysOfMonthDiv = document.getElementById('daysOfMonth');
+    daysOfMonthDiv.innerHTML = ''; // Clear previous content
 
-            // Add empty spaces for the first week if the month doesn't start on Sunday
-            for (let i = 0; i < firstDayOfMonth; i++) {
-                const emptyDiv = document.createElement('div');
-                emptyDiv.classList.add('empty');
-                daysOfMonthDiv.appendChild(emptyDiv);
-            }
+    // Add empty spaces for the first week if the month doesn't start on Sunday
+    for (let i = 0; i < firstDayOfMonth; i++) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.classList.add('empty');
+        daysOfMonthDiv.appendChild(emptyDiv);
+    }
 
-            // Add the days of the month
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayDiv = document.createElement('div');
-                dayDiv.classList.add('day');
-                dayDiv.textContent = day;
-                dayDiv.onclick = function () {
-                    selectDay(dayDiv); // Make day clickable
-                };
-                daysOfMonthDiv.appendChild(dayDiv);
-            }
+    // Add the days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.classList.add('day');
+        dayDiv.textContent = day;
+
+        // Check if the day has already passed
+        const isPastDay = new Date(currentYear, currentMonth, day) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+        if (isPastDay) {
+            dayDiv.classList.add('disabled'); // Add disabled styling
+        } else {
+            dayDiv.onclick = function () {
+                selectDay(dayDiv); // Make day clickable
+            };
         }
+
+        daysOfMonthDiv.appendChild(dayDiv);
+    }
+}
+
+
+// Modify generateDaysOfWeek to apply faded style
+function generateDaysOfWeek() {
+    const daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"];
+    const daysOfWeekDiv = document.getElementById('daysOfWeek');
+    
+    // Add day names with faded style
+    daysOfWeek.forEach(day => {
+        const dayDiv = document.createElement('div');
+        dayDiv.classList.add('day-of-week', 'faded'); // Apply faded style
+        dayDiv.textContent = day;
+        daysOfWeekDiv.appendChild(dayDiv);
+    });
+}
 
         // Function to select a day and deselect others
         function selectDay(selectedDayDiv) {
@@ -303,8 +400,8 @@
         }
 
         function selectDateTime(e){
-            let clockObject=document.getElementById('clock');
-            let monthObject=document.getElementById('datepicker');
+            const clockObject=document.getElementById('clock');
+            const monthObject=document.getElementById('datepicker');
 
             if(e.target.id==='timeBtn'){
                 clockObject.hidden=false;
