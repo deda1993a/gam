@@ -110,13 +110,13 @@
             color: white;
         }
 
-        /* Faded style for previous days and week headers */
+       
 .faded {
-    color: rgba(0, 0, 0, 0.4); /* Faded text color */
+    color: rgba(0, 0, 0, 0.4); 
 }
 
 .day.past {
-    color: rgba(0, 0, 0, 0.4); /* Faded color for past days */
+    color: rgba(0, 0, 0, 0.4); 
 }
 
 
@@ -124,7 +124,7 @@
 
         .days-of-month {
             display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 7 columns */
+            grid-template-columns: repeat(7, 1fr); 
             gap: 5px;
         }
 
@@ -154,11 +154,13 @@
 
 
         .empty {
-            visibility: hidden; /* Hide empty cells at the beginning of the month */
+            visibility: hidden; 
         }
 
         .year{
-            position: relative;
+            display:flex;
+            flex-direction: column;
+            position:relative;
             display: inline-block;
             font-size: 16px;
             border: none;
@@ -167,31 +169,31 @@
 
         .year select:focus {
             outline: none;
-            border: none; /* Keret semmilyen fókusz esetén */
+            border: none; 
         }
 
-/* Style for days-of-week container with single underline */
+
 .days-of-week {
     display: flex;
-    justify-content: space-around; /* Space out days evenly */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.5); /* Single underline for all days */
-    padding-bottom: 5px; /* Space between text and underline */
+    justify-content: space-around; 
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5); 
+    padding-bottom: 5px; 
 }
 
-/* Faded style for each day anagram */
+
 .days-of-week .day-of-week {
-    color: rgba(0, 0, 0, 0.5); /* Faded text color */
+    color: rgba(0, 0, 0, 0.5); 
     text-align: center;
-    flex: 1; /* Equal spacing for all days */
+    flex: 1; 
 }
 
 
-/* Style for days that have passed */
+
 .day.disabled {
-    color: rgba(0, 0, 0, 0.3); /* Faded black for passed days */
+    color: rgba(0, 0, 0, 0.3); 
     cursor: not-allowed;
-    pointer-events: none; /* Disable click events */
-    background-color: rgb(255, 255, 255); /* Optional: Gray background */
+    pointer-events: none; 
+    background-color: rgb(255, 255, 255); 
 }
 
 .clock-container{
@@ -200,14 +202,14 @@ box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 
 .confirm-buttons {
     display: flex;
-    justify-content: space-between; /* Push buttons to opposite sides */
+    justify-content: space-between; 
     margin: 10px;
     padding: 0;
 }
 
 .confirm-buttons button {
-    border: none; /* Make borders invisible */
-    background: none; /* Optional: Remove background styling */
+    border: none; 
+    background: none; 
     font-size: 14px;
     cursor: pointer;
 }
@@ -215,6 +217,27 @@ box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 .confirm-buttons button:hover{
     background-color: #ddd;
 }
+
+.time-container {
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .time-container .minute .second {
+            text-decoration: underline;
+        }
+        .time-container .hour {
+            color: orange;
+        }
+        .time-container .colon {
+            text-decoration: none;
+        }
+        .time-container .pm {
+            margin-left: 8px; 
+            font-weight: bold;
+        }
+
 
 
 
@@ -226,27 +249,26 @@ box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 <body>
     <div class="input-container">
     <input type="text" class="date" placeholder="DD.MM.YYYY - HH:MM" disabled inputmode="">
-    <img src="datepick1.png">
+    <img id="dateimg" src="datepick1.png">
     </div>
     <div class="root">
-        <div class="dateortine">
+        <div id="datetinesel" class="dateortine">
             <button id="dateBtn"><img src="calIcon.png" alt="time">Date</button>
             <button id="timeBtn"><img src="timeIcon.png">Time</button>
         </div>
-    <div id="datepicker" class="datepicker-container" hidden>
+    <div id="datepicker" class="datepicker-container">
 
 
-        <!-- Month Navigation -->
+  
         <div id="month" class="month-buttons">
             <select class="year" id="yearSelect"></select>
             <button id="prevMonthBtn">&lt;</button>            
             <button id="nextMonthBtn">&gt;</button>
         </div>
 
-        <!-- Days of the week header (One letter) -->
+
         <div class="days-of-week" id="daysOfWeek"></div>
 
-        <!-- Days of the month will be displayed here -->
         <div class="days-of-month" id="daysOfMonth"></div>
 
         <div class="confirm-container">
@@ -260,23 +282,26 @@ box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
     
 
     <div id="clock" class="clock-container" hidden>
+        <div class="time-container">
+            <span class="time-unit hour">10</span><span class="colon">:</span>
+            <span class="time-unit minute">52</span><span class="colon">:</span>
+            <span class="time-unit second">00</span>
+            <span class="pm">PM</span>
+        </div>
         <canvas id="clockCanvas" width="300" height="300"></canvas>
       </div>
+              <div class="confirm-container">
+            <div class="confirm-buttons">
+                <button id="cancelBtn"><img src="clearBtn.png" alt="time">Clear</button>
+                <button id="okBtn"><img src="okayBtn.png">Ok</button>
+            </div>
+        </div>
     </div>
 
 
     <script>
 
-const dateortine = document.getElementById('dateortine');
 
-// Add event listener to the container (event delegation)
-dateortine.addEventListener('click', (event) => {
-    // Check if the clicked element is a button
-    if (event.target.tagName === 'BUTTON') {
-        // Toggle the 'selected' class for the clicked button
-        event.target.classList.toggle('selected');
-    }
-});
 
         let currentYear, currentMonth;
 
@@ -284,31 +309,40 @@ dateortine.addEventListener('click', (event) => {
                 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
             ];
-        // Function to populate the year select with months in "Jan 2019" format
-        function getYears() {
-            const d = new Date();
-            currentYear = d.getFullYear();
-            currentMonth = d.getMonth(); // 0-indexed, so 0 is January, 11 is December
-            const yearSelect = document.getElementById('yearSelect');
 
-            // Get months in "Jan 2019" format
+function getYears() {
+    const d = new Date();
+    currentYear = d.getFullYear();
+    currentMonth = d.getMonth(); 
+    const yearSelect = document.getElementById('yearSelect');
 
-
-            for (let year = currentYear; year >= currentYear - 100; year--) {
-                months.forEach((month, index) => {
-                    const option = document.createElement('option');
-                    option.value = `${month} ${year}`;
-                    option.textContent = `${month} ${year}`;
-                    yearSelect.appendChild(option);
-                });
-            }
-
-            // Set the default to the current month and year
-            yearSelect.value = `${months[currentMonth]} ${currentYear}`;
+    // Populate months in reverse order (Dec to Jan)
+    for (let year = currentYear; year >= currentYear - 100; year--) {
+        for (let i = months.length - 1; i >= 0; i--) {
+            const month = months[i];
+            const option = document.createElement('option');
+            option.value = `${month} ${year}`;
+            option.textContent = `${month} ${year}`;
+            yearSelect.appendChild(option);
         }
+    }
 
-        function generateDaysOfMonth() {
-    const today = new Date(); // Get today's date
+    // Set the default to the current month and year
+    const defaultMonthYear = `${months[currentMonth]} ${currentYear}`;
+    yearSelect.value = defaultMonthYear;
+
+    // Event listener for when the user selects a new year/month
+    yearSelect.addEventListener('change', function () {
+        const selectedYearMonth = yearSelect.value.split(" ");
+        currentMonth = months.indexOf(selectedYearMonth[0]);
+        currentYear = parseInt(selectedYearMonth[1]);
+        updateCalendar();
+    });
+}
+
+// Function to update the days of the month based on the selected year and month
+function generateDaysOfMonth() {
+    const today = new Date(); 
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
@@ -352,23 +386,31 @@ function generateDaysOfWeek() {
     // Add day names with faded style
     daysOfWeek.forEach(day => {
         const dayDiv = document.createElement('div');
-        dayDiv.classList.add('day-of-week', 'faded'); // Apply faded style
+        dayDiv.classList.add('day-of-week', 'faded'); 
         dayDiv.textContent = day;
         daysOfWeekDiv.appendChild(dayDiv);
     });
 }
 
-        // Function to select a day and deselect others
-        function selectDay(selectedDayDiv) {
-            // Deselect any previously selected day
-            const previouslySelectedDay = document.querySelector('.selected');
-            if (previouslySelectedDay) {
-                previouslySelectedDay.classList.remove('selected');
-            }
+// Function to select a day and format the selected date
+function selectDay(selectedDayDiv) {
+    // Deselect any previously selected day
+    const previouslySelectedDay = document.querySelector('.selected');
+    if (previouslySelectedDay) {
+        previouslySelectedDay.classList.remove('selected');
+    }
 
-            // Select the clicked day
-            selectedDayDiv.classList.add('selected');
-        }
+    // Select the clicked day
+    selectedDayDiv.classList.add('selected');
+
+    // Update the input field with the selected date
+    const formattedDate = getSelectedDate();
+    if (formattedDate) {
+        const inputField = document.querySelector('.date');
+        inputField.value = formattedDate; // Update input with the selected date
+    }
+}
+
 
         // Function to go to the previous month
         function prevMonth() {
@@ -392,38 +434,98 @@ function generateDaysOfWeek() {
             updateCalendar();
         }
 
-        // Update the calendar after changing the month or year
-        function updateCalendar() {
-            const yearSelect = document.getElementById('yearSelect');
-            yearSelect.value = `${months[currentMonth]} ${currentYear}`;
-            generateDaysOfMonth();
+// Function to update the calendar after changing the month or year
+function updateCalendar() {
+    const yearSelect = document.getElementById('yearSelect');
+    yearSelect.value = `${months[currentMonth]} ${currentYear}`;
+    generateDaysOfMonth();
+}
+
+let formattedDate;
+let formattedFullTime;
+
+function getSelectedDate() {
+    const selectedDayDiv = document.querySelector('.selected');
+    if (selectedDayDiv) {
+        const selectedDay = selectedDayDiv.textContent;
+        console.log(selectedDay);
+        const selectedMonth = currentMonth + 1; // Months are 0-indexed
+        const selectedYear = currentYear;
+
+        // Format date as DD.MM.YYYY
+        formattedDate = `${selectedDay.padStart(2, '0')}.${selectedMonth.toString().padStart(2, '0')}.${selectedYear}`;
+        return formattedDate;
+    }
+    return null; 
+}
+
+
+window.onload = function () {
+    getYears();
+    generateDaysOfWeek();
+    generateDaysOfMonth();
+
+    // Initialize hidden elements
+    const rootDiv = document.querySelector('.root');
+    const datepicker = document.getElementById('datepicker');
+    const clock = document.getElementById('clock');
+    const dateImg = document.getElementById('dateimg');
+    let dateImgOriginalSrc = "datepick1.png";
+    let dateImgToggledSrc = "datepick2.png";
+
+    rootDiv.hidden = true; 
+
+    // Toggle visibility and change image source on clicking the image
+    dateImg.onclick = function () {
+        const isHidden = rootDiv.hidden;
+
+        // Toggle visibility of root
+        rootDiv.hidden = !isHidden;
+
+        // Change the image source
+        dateImg.src = isHidden ? dateImgToggledSrc : dateImgOriginalSrc;
+
+        if (isHidden) {
+            // Trigger the dateBtn click event when root is shown
+            document.getElementById('dateBtn').click();
         }
+    };
 
-        function selectDateTime(e){
-            const clockObject=document.getElementById('clock');
-            const monthObject=document.getElementById('datepicker');
+    // Add event listeners for the "Date" and "Time" buttons
+    document.getElementById('dateBtn').onclick = function () {
+        clock.hidden = true;
+        datepicker.hidden = false;
+        this.classList.add('selected');
+        document.getElementById('timeBtn').classList.remove('selected');
 
-            if(e.target.id==='timeBtn'){
-                clockObject.hidden=false;
-                monthObject.hidden=true;
-            }else if(e.target.id==='dateBtn'){
-                clockObject.hidden=true;
-                monthObject.hidden=false;
-            }
-        }
+    };
 
-        // Call the functions when the page loads
-        window.onload = function () {
-            getYears();
-            generateDaysOfWeek();
-            generateDaysOfMonth();
-
-            // Add event listeners for month navigation buttons
-            document.getElementById('prevMonthBtn').onclick = prevMonth;
-            document.getElementById('nextMonthBtn').onclick = nextMonth;
-            document.getElementById('timeBtn').onclick= selectDateTime;
-            document.getElementById('dateBtn').onclick= selectDateTime;
+    document.getElementById('timeBtn').onclick = function () {
+            datepicker.hidden = true;
+            clock.hidden = false;
+            this.classList.add('selected');
+            document.getElementById('dateBtn').classList.remove('selected');
         };
+
+        document.getElementById('okBtn').onclick = function () {
+    const formattedDate = getSelectedDate(); 
+    if (formattedDate) {
+        const inputField = document.querySelector('.date');
+        inputField.value = formattedDate; // Set the selected date in the input
+    }
+    rootDiv.hidden = true; 
+};
+
+document.getElementById('cancelBtn').onclick = function () {
+    const inputField = document.querySelector('.date');
+    inputField.value = ''; // Reset input to the placeholder text
+    rootDiv.hidden = true; 
+};
+
+    // Add the "Next" and "Prev" month buttons functionality
+    document.getElementById('prevMonthBtn').onclick = prevMonth;
+    document.getElementById('nextMonthBtn').onclick = nextMonth;
+};
 
         const canvas = document.getElementById('clockCanvas');
     const ctx = canvas.getContext('2d');
@@ -432,7 +534,7 @@ function generateDaysOfWeek() {
     const outerRadius = clockRadius - 10;  // Radius for the outer circle (12-hour format)
 
     const hourCount = 12; // 12-hour format
-    const innerHourCount = 12; // 24-hour format
+    const innerHourCount = 12; 
 
     const hourAngles = [];
     const innerHourAngles = [];
@@ -447,15 +549,15 @@ function generateDaysOfWeek() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Fill the circle with a background color (gray)
-      ctx.fillStyle = '#d3d3d3'; // Gray background color
+      ctx.fillStyle = '#d3d3d3'; 
       ctx.beginPath();
       ctx.arc(clockRadius, clockRadius, clockRadius - 5, 0, Math.PI * 2);
       ctx.fill();
 
       // Draw a small circle at the center of the clock
-      ctx.fillStyle = '#333'; // Center circle color
+      ctx.fillStyle = '#333'; 
       ctx.beginPath();
-      ctx.arc(clockRadius, clockRadius, 5, 0, Math.PI * 2); // Small center circle
+      ctx.arc(clockRadius, clockRadius, 5, 0, Math.PI * 2); 
       ctx.fill();
 
 // Draw hour labels for 12-hour format on the outer side
@@ -468,13 +570,19 @@ for (let i = 0; i < hourCount; i++) {
 
   // Highlight the selected hour with a different background color
   if (selectedHour === i) {
+    const hour=document.querySelector('.time-unit.hour').textContent=i  === 0 ? 12 : i.toString().padStart(2, '0'); 
+    const minute=document.querySelector('.time-unit.minute').textContent;
+    const second=document.querySelector('.time-unit.second').textContent;
+    formattedFullTime=hour+" : "+minute+" : "+second;
+    
+    document.querySelector('.date').value = formattedDate+" - "+formattedFullTime; 
     ctx.beginPath();
-    ctx.arc(x, y, 25, 0, Math.PI * 2); // Highlight radius
-    ctx.fillStyle = '#ff6347'; // Highlight color
+    ctx.arc(x, y, 25, 0, Math.PI * 2); 
+    ctx.fillStyle = '#ff6347'; 
     ctx.fill();
   }
 
-  ctx.fillStyle = '#333'; // Default text color
+  ctx.fillStyle = '#333'; 
   ctx.fillText(i === 0 ? 12 : i, x - 10, y + 5); // Adjust text for hour 12
 }
 
@@ -488,13 +596,19 @@ for (let i = 0; i < innerHourCount; i++) {
 
   // Highlight the selected hour with a different background color
   if (selectedInnerHour === i) {
+    const hour=document.querySelector('.time-unit.hour').textContent = i<1? `0${i}` : (12+i).toString().padStart(2, '0');
+    const minute=document.querySelector('.time-unit.minute').textContent;
+    const second=document.querySelector('.time-unit.second').textContent;
+    formattedFullTime=hour+" : "+minute+" : "+second;
+    
+    document.querySelector('.date').value = formattedDate+" - "+formattedFullTime; 
     ctx.beginPath();
-    ctx.arc(x, y, 25, 0, Math.PI * 2); // Highlight radius
-    ctx.fillStyle = '#ff6347'; // Highlight color
+    ctx.arc(x, y, 25, 0, Math.PI * 2); 
+    ctx.fillStyle = '#ff6347'; 
     ctx.fill();
   }
 
-  ctx.fillStyle = '#333'; // Default text color
+  ctx.fillStyle = '#333'; 
   ctx.fillText(i < 1 ? `0${i}` : 12+i, x - 10, y + 5); // Zero-pad single-digit hours
 }
 
@@ -559,6 +673,7 @@ for (let i = 0; i < innerHourCount; i++) {
     // Initial draw of the clock
     ctx.font = '16px Arial';
     drawClock();
+    
 
     </script>
 
