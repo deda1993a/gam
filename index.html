@@ -17,53 +17,80 @@
         }
 
         .datepicker-container {
-            height: 350px;
-            width: 250px;
-            flex-direction: column;
-            padding: 10px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-
+            height: 330px;
+            width: 300px;
+            flex-direction: column;            
+            font-family: Arial, sans-serif;
+            font-size: 14px;
         }
 
         .root{
-            height: 350px;
-            width: 250px;
+            height: 380px;
+            width: 300px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .dateortine {
             display: flex;
             flex-direction: row;
-            
             justify-content: space-between;
-            margin-bottom: 10px;
+            width: 300px;
+            height: 40px;
+            font-weight: bold; 
         }
 
         .dateortine button, .month-buttons button {
+            font-family: Arial, sans-serif;
             flex: 1;
-            font-size: 14px;
+            font-size: 16px;
             padding: 5px 10px;
             cursor: pointer;
             float: left;
             border: none;
-           
+            background-color: #EAEAEA;
+            color: #7D7D7D;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .confirm-buttons button {
+            font-family: Arial, sans-serif;
+            flex: 1;
+
+            cursor: pointer;
+            float: left;
+            border: none;
+  
+           gap: 8px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+        
         }
 
         .dateortine button:hover {
-            background-color: #4CAF50;
-            color: white;
+            background-color: white;
+       
         }
 
         /* Selected State */
-        .dateortine button.selected {
-            background-color: #4CAF50;
-            color: white;
+        .dateortine button.selected-tab {
+            background-color: white;
+            color: #000;
+            font-weight: bold;
         }
 
         .dateortine img{
            
-            width: 10px;
-            height: 10px;
+            width: 20px;
+            height: 20px;
             margin-right: 8px;
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
 
         .dateortine img::selecte {
@@ -110,6 +137,18 @@
             color: white;
         }
 
+        .okBtnClass{
+            display: flex;
+  justify-content: flex-start; /* Default alignment for other elements */
+  position: relative;  
+  margin-left: auto;  /* Pushes the button to the right */
+  margin-right: 21px; /* Adds the 21px gap to the right */
+  width: 51px;
+  height: 20px;
+        }
+
+
+
        
 .faded {
     color: rgba(0, 0, 0, 0.4); 
@@ -125,7 +164,8 @@
         .days-of-month {
             display: grid;
             grid-template-columns: repeat(7, 1fr); 
-            gap: 5px;
+            gap: 10px;
+            padding: 10px;
         }
 
         .input-container {
@@ -134,8 +174,8 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             padding-right: 15px;
-            width: 300px;
-            height: 40px;
+            width: 283px;
+            height: 38px;
         }
 
         .input-container input {
@@ -149,6 +189,7 @@
             width: 20px;
             height: 20px;
             cursor: pointer;
+
         }
 
 
@@ -197,14 +238,26 @@
 }
 
 .clock-container{
-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+
+height: 340px;
+width: 300px;
 }
 
 .confirm-buttons {
     display: flex;
-    justify-content: space-between; 
-    margin: 10px;
-    padding: 0;
+    margin-left: 21px;
+    margin-bottom: 13px;
+    gap: 20px;
+}
+
+.confirm-buttons img{
+    width: 20px;
+    height: 20px;
+}
+
+.okBtnClasstn {
+    width: 51px;
+    height: 20px;
 }
 
 .confirm-buttons button {
@@ -218,24 +271,38 @@ box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
     background-color: #ddd;
 }
 
+.confirm-buttons div:hover{
+    background-color: #ddd;
+}
+
 .time-container {
             font-family: Arial, sans-serif;
-            font-size: 24px;
-            display: inline-flex;
-            align-items: center;
+            font-size: 40px;
+            display: flex;
+            justify-content: center; /* Vízszintesen középre */
+            align-items: center; 
+            width: 300px;
+            height: 67px;
+            border-bottom: 1px solid #EAEAEA; 
+            text-underline-offset: 8px;
         }
-        .time-container .minute .second {
+        .time-container .minute {
+            text-decoration: underline;
+        }
+        .time-container .second {
             text-decoration: underline;
         }
         .time-container .hour {
             color: orange;
+            text-decoration: underline;
         }
         .time-container .colon {
             text-decoration: none;
         }
         .time-container .pm {
             margin-left: 8px; 
-            font-weight: bold;
+            font-weight: normal;
+            text-decoration: underline;
         }
 
 
@@ -249,12 +316,17 @@ box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 <body>
     <div class="input-container">
     <input type="text" class="date" placeholder="DD.MM.YYYY - HH:MM" disabled inputmode="">
-    <img id="dateimg" src="datepick1.png">
+    <img id="dateimg" src="DateTime.svg">
     </div>
     <div class="root">
         <div id="datetinesel" class="dateortine">
-            <button id="dateBtn"><img src="calIcon.png" alt="time">Date</button>
-            <button id="timeBtn"><img src="timeIcon.png">Time</button>
+
+            <button id="dateBtn"><img src="Calendar.svg" alt="time" style="width: fit-content; min-width: fit-content;">
+                <div class="dateBtnText">Date</div>
+            </button>
+            <button id="timeBtn"><img src="Time.svg">
+                <div class="timeBtnText" style="width: fit-content; min-width: fit-content;">Time</div>
+            </button>
         </div>
     <div id="datepicker" class="datepicker-container">
 
@@ -284,18 +356,34 @@ box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
     <div id="clock" class="clock-container" hidden>
         <div class="time-container">
             <span class="time-unit hour">10</span><span class="colon">:</span>
-            <span class="time-unit minute">52</span><span class="colon">:</span>
+            <span class="time-unit minute">00</span><span class="colon">:</span>
             <span class="time-unit second">00</span>
             <span class="pm">PM</span>
         </div>
-        <canvas id="clockCanvas" width="300" height="300"></canvas>
-      </div>
-              <div class="confirm-container">
+        <canvas id="clockCanvas" width="300" height="236"></canvas>
+        <div class="confirm-time-container">
             <div class="confirm-buttons">
-                <button id="cancelBtn"><img src="clearBtn.png" alt="time">Clear</button>
-                <button id="okBtn"><img src="okayBtn.png">Ok</button>
+                <div class="imgTimeNow">
+                    <img src="TimeNow.svg" alt="TimeNow">
+                </div>
+                <div class="imgMorning">
+                    <img src="Morning.svg" alt="Morning">
+                </div>
+                <div class="imgDay">
+                    <img src="Day.svg" alt="Day">
+                </div>
+                <div class="imgEvening">
+                    <img src="Night.svg" alt="Night">
+                </div>
+                <div class="okBtnClass">
+                <button id="okBtn"><img src="Ok.svg">
+                    <div class="okText" style="width: fit-content; min-width: fit-content;">Ok</div>
+                </button>
+            </div>
             </div>
         </div>
+      </div>
+
     </div>
 
 
@@ -396,6 +484,7 @@ function generateDaysOfWeek() {
 function selectDay(selectedDayDiv) {
     // Deselect any previously selected day
     const previouslySelectedDay = document.querySelector('.selected');
+    console.log(previouslySelectedDay);
     if (previouslySelectedDay) {
         previouslySelectedDay.classList.remove('selected');
     }
@@ -483,7 +572,7 @@ window.onload = function () {
         rootDiv.hidden = !isHidden;
 
         // Change the image source
-        dateImg.src = isHidden ? dateImgToggledSrc : dateImgOriginalSrc;
+        //dateImg.src = isHidden ? dateImgToggledSrc : dateImgOriginalSrc;
 
         if (isHidden) {
             // Trigger the dateBtn click event when root is shown
@@ -495,16 +584,16 @@ window.onload = function () {
     document.getElementById('dateBtn').onclick = function () {
         clock.hidden = true;
         datepicker.hidden = false;
-        this.classList.add('selected');
-        document.getElementById('timeBtn').classList.remove('selected');
+        this.classList.add('selected-tab');
+        document.getElementById('timeBtn').classList.remove('selected-tab');
 
     };
 
     document.getElementById('timeBtn').onclick = function () {
             datepicker.hidden = true;
             clock.hidden = false;
-            this.classList.add('selected');
-            document.getElementById('dateBtn').classList.remove('selected');
+            this.classList.add('selected-tab');
+            document.getElementById('dateBtn').classList.remove('selected-tab');
         };
 
         document.getElementById('okBtn').onclick = function () {
@@ -530,8 +619,8 @@ document.getElementById('cancelBtn').onclick = function () {
         const canvas = document.getElementById('clockCanvas');
     const ctx = canvas.getContext('2d');
     const clockRadius = canvas.width / 2;
-    const innerRadius = clockRadius - 40;  // Radius for the inner circle (24-hour format)
-    const outerRadius = clockRadius - 10;  // Radius for the outer circle (12-hour format)
+    const innerRadius = clockRadius - 90;  // Radius for the inner circle (24-hour format)
+    const outerRadius = clockRadius - 60;  // Radius for the outer circle (12-hour format)
 
     const hourCount = 12; // 12-hour format
     const innerHourCount = 12; 
@@ -549,23 +638,26 @@ document.getElementById('cancelBtn').onclick = function () {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Fill the circle with a background color (gray)
-      ctx.fillStyle = '#d3d3d3'; 
+      ctx.fillStyle = '#F4F4F4'; 
       ctx.beginPath();
-      ctx.arc(clockRadius, clockRadius, clockRadius - 5, 0, Math.PI * 2);
+      ctx.arc(150, 118, 110, 0, Math.PI * 2);
       ctx.fill();
 
       // Draw a small circle at the center of the clock
-      ctx.fillStyle = '#333'; 
+      ctx.fillStyle = '#FBE8CE'; 
       ctx.beginPath();
-      ctx.arc(clockRadius, clockRadius, 5, 0, Math.PI * 2); 
+      ctx.arc(150, 118, 5, 0, Math.PI * 2); 
       ctx.fill();
 
+// Draw lines for the selected hour if any
+      drawLine();
+      
 // Draw hour labels for 12-hour format on the outer side
 for (let i = 0; i < hourCount; i++) {
   const angle = (i * Math.PI) / 6 - Math.PI / 2; // Adjust angle: start from -90°
   hourAngles.push(angle);
-  const x = clockRadius + Math.cos(angle) * outerRadius;
-  const y = clockRadius + Math.sin(angle) * outerRadius;
+  const x = 150 + Math.cos(angle) * outerRadius;
+  const y = 118 + Math.sin(angle) * outerRadius;
   hourPositions.push({ x, y });
 
   // Highlight the selected hour with a different background color
@@ -577,21 +669,22 @@ for (let i = 0; i < hourCount; i++) {
     
     document.querySelector('.date').value = formattedDate+" - "+formattedFullTime; 
     ctx.beginPath();
-    ctx.arc(x, y, 25, 0, Math.PI * 2); 
-    ctx.fillStyle = '#ff6347'; 
+    ctx.arc(x, y, 13, 0, Math.PI * 2); 
+    ctx.fillStyle = '#FBE8CE'; 
     ctx.fill();
   }
 
-  ctx.fillStyle = '#333'; 
-  ctx.fillText(i === 0 ? 12 : i, x - 10, y + 5); // Adjust text for hour 12
+  ctx.font = "13px Arial";
+  ctx.fillStyle = '#4E4E4E'; 
+  ctx.fillText(i === 0 ? 12 : i, x - 5, y+5 ); // Adjust text for hour 12
 }
 
 // Draw hour labels for 24-hour format on the inner side
 for (let i = 0; i < innerHourCount; i++) {
   const angle = (i * Math.PI) / 6 - Math.PI / 2; // Adjust angle: start from -90°
   innerHourAngles.push(angle);
-  const x = clockRadius + Math.cos(angle) * innerRadius;
-  const y = clockRadius + Math.sin(angle) * innerRadius;
+  const x = 150 + Math.cos(angle) * innerRadius;
+  const y = 118 + Math.sin(angle) * innerRadius;
   innerHourPositions.push({ x, y });
 
   // Highlight the selected hour with a different background color
@@ -603,27 +696,27 @@ for (let i = 0; i < innerHourCount; i++) {
     
     document.querySelector('.date').value = formattedDate+" - "+formattedFullTime; 
     ctx.beginPath();
-    ctx.arc(x, y, 25, 0, Math.PI * 2); 
-    ctx.fillStyle = '#ff6347'; 
+    ctx.arc(x, y, 13, 0, Math.PI * 2); 
+    ctx.fillStyle = '#FBE8CE'; 
     ctx.fill();
   }
-
-  ctx.fillStyle = '#333'; 
-  ctx.fillText(i < 1 ? `0${i}` : 12+i, x - 10, y + 5); // Zero-pad single-digit hours
+  ctx.font = "13px Arial";
+  ctx.fillStyle = '#4E4E4E'; 
+  ctx.fillText(i < 1 ? `0${i}` : 12+i, x - 7, y + 5); // Zero-pad single-digit hours
 }
 
 
-      // Draw lines for the selected hour if any
-      drawLine();
+      
+      
     }
 
     function drawLine() {
       if (selectedHour !== null) {
         const outerPos = hourPositions[selectedHour];
         ctx.beginPath();
-        ctx.moveTo(clockRadius, clockRadius);
+        ctx.moveTo(150, 118);
         ctx.lineTo(outerPos.x, outerPos.y);
-        ctx.strokeStyle = '#ff6347';
+        ctx.strokeStyle = '#FBE8CE';
         ctx.lineWidth = 2;
         ctx.stroke();
       }
@@ -631,9 +724,9 @@ for (let i = 0; i < innerHourCount; i++) {
       if (selectedInnerHour !== null) {
         const innerPos = innerHourPositions[selectedInnerHour];
         ctx.beginPath();
-        ctx.moveTo(clockRadius, clockRadius);
+        ctx.moveTo(150, 118);
         ctx.lineTo(innerPos.x, innerPos.y);
-        ctx.strokeStyle = '#ff6347';
+        ctx.strokeStyle = '#FBE8CE';
         ctx.lineWidth = 2;
         ctx.stroke();
       }
