@@ -39,7 +39,7 @@
             font-weight: bold; 
         }
 
-        .dateortine button, .month-buttons button {
+        .dateortine button {
             font-family: Arial, sans-serif;
             flex: 1;
             font-size: 16px;
@@ -48,6 +48,23 @@
             float: left;
             border: none;
             background-color: #EAEAEA;
+            color: #7D7D7D;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .month-buttons button{
+            font-family: Arial, sans-serif;
+            flex: 1;
+            font-size: 16px;
+            padding: 5px 10px;
+            cursor: pointer;
+            float: left;
+            border: none;
+            background-color: #FFFFFF;
             color: #7D7D7D;
             display: flex;
             align-items: center;
@@ -84,6 +101,10 @@
             font-weight: bold;
         }
 
+        .time-container .selectedMode{
+            color: orange;
+        }
+
         .dateortine img{
            
             width: 20px;
@@ -102,7 +123,7 @@
             justify-content: space-between;
             margin: 10px;           
             padding: 0;
-            
+            align-items: center;
         }
 
         .days-of-week {
@@ -152,6 +173,8 @@
        
 .faded {
     color: rgba(0, 0, 0, 0.4); 
+    width: 10px;
+    height: 10px;
 }
 
 .day.past {
@@ -206,6 +229,12 @@
             font-size: 16px;
             border: none;
             font-family: Arial;
+            width: 100px;
+            appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem top 50%;
+  background-size: 0.65rem auto;
         }
 
         .year select:focus {
@@ -227,6 +256,7 @@
     text-align: center;
     flex: 1; 
 }
+
 
 
 
@@ -285,6 +315,7 @@ width: 300px;
             height: 67px;
             border-bottom: 1px solid #EAEAEA; 
             text-underline-offset: 8px;
+            cursor: pointer;
         }
         .time-container .minute {
             text-decoration: underline;
@@ -299,11 +330,28 @@ width: 300px;
         .time-container .colon {
             text-decoration: none;
         }
-        .time-container .pm {
+        .time-container .hourformat {
             margin-left: 8px; 
             font-weight: normal;
             text-decoration: underline;
         }
+
+        .time-container .minute:hover{
+            color: orange;
+        }
+
+        .time-container .hour:hover{
+            color: orange;
+        }
+
+        .time-container .second:hover{
+            color: orange;
+        }
+
+        .time-container .hourformat:hover{
+            color: orange;
+        }
+
 
 
 
@@ -334,8 +382,10 @@ width: 300px;
   
         <div id="month" class="month-buttons">
             <select class="year" id="yearSelect"></select>
+            <div class="navBtns">
             <button id="prevMonthBtn">&lt;</button>            
             <button id="nextMonthBtn">&gt;</button>
+            </div>
         </div>
 
 
@@ -345,8 +395,12 @@ width: 300px;
 
         <div class="confirm-container">
             <div class="confirm-buttons">
-                <button id="cancelBtn"><img src="clearBtn.png" alt="time">Clear</button>
-                <button id="okBtn"><img src="okayBtn.png">Ok</button>
+                <button id="cancelBtn"><img src="clearBtn.png" alt="time">
+                    <div class="cancelBtnText" style="width: fit-content; min-width: fit-content;">Clear</div>
+                </button>
+                <button id="okBtn"><img src="Ok.svg">
+                    <div class="okBtnText" style="width: fit-content; min-width: fit-content;">Ok</div>
+                </button>
             </div>
         </div>
 
@@ -355,15 +409,15 @@ width: 300px;
 
     <div id="clock" class="clock-container" hidden>
         <div class="time-container">
-            <span class="time-unit hour">10</span><span class="colon">:</span>
-            <span class="time-unit minute">00</span><span class="colon">:</span>
-            <span class="time-unit second">00</span>
-            <span class="pm">PM</span>
+            <span id="time-unithourId" class="time-unit hour">10</span><span id="colonId" class="colon">:</span>
+            <span id="time-unitminuteID" class="time-unit minute">00</span><span class="colon">:</span>
+            <span id="time-unitsecondID" class="time-unit second">00</span>
+            <span id="hourformatId" class="hourformat">PM</span>
         </div>
         <canvas id="clockCanvas" width="300" height="236"></canvas>
         <div class="confirm-time-container">
             <div class="confirm-buttons">
-                <div class="imgTimeNow">
+                <div id="imgTimeNowId" class="imgTimeNow">
                     <img src="TimeNow.svg" alt="TimeNow">
                 </div>
                 <div class="imgMorning">
@@ -392,6 +446,7 @@ width: 300px;
 
 
         let currentYear, currentMonth;
+        let currentSelectedTime = { hour: 0, minute: 0 }; // Default to 12:00
 
         const months = [
                 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -596,6 +651,12 @@ window.onload = function () {
             document.getElementById('dateBtn').classList.remove('selected-tab');
         };
 
+        document.getElementById('hourformatId').onclick = function () {
+            let formatType=document.getElementById('hourformatId');
+            formatType.textContent="AM";
+            console.log("span");
+        };
+
         document.getElementById('okBtn').onclick = function () {
     const formattedDate = getSelectedDate(); 
     if (formattedDate) {
@@ -616,157 +677,380 @@ document.getElementById('cancelBtn').onclick = function () {
     document.getElementById('nextMonthBtn').onclick = nextMonth;
 };
 
-        const canvas = document.getElementById('clockCanvas');
-    const ctx = canvas.getContext('2d');
-    const clockRadius = canvas.width / 2;
-    const innerRadius = clockRadius - 90;  // Radius for the inner circle (24-hour format)
-    const outerRadius = clockRadius - 60;  // Radius for the outer circle (12-hour format)
+const canvas = document.getElementById('clockCanvas');
+const ctx = canvas.getContext('2d');
+const clockRadius = 110;
+const centerX = 150;
+const centerY = 118;
 
-    const hourCount = 12; // 12-hour format
-    const innerHourCount = 12; 
+let outerRadius = clockRadius - 50;
+let innerRadius = clockRadius - 20;
 
-    const hourAngles = [];
-    const innerHourAngles = [];
-    const hourPositions = [];
-    const innerHourPositions = [];
+const hourCount = 12;
+const minuteCount = 60; // Full minute positions
+let currentMode = "hour"; // Modes: "hour", "minute", "second"
 
-    // Coordinates for the selected hours
-    let selectedHour = null;
-    let selectedInnerHour = null;
+const hourPositions = [];
+const innerHourPositions = [];
+const minutePositions = [];
+const allMinutePositions = []; // Holds positions for all minutes
+let selectedPosition = null;
+let cursorX = null;
+let cursorY = null;
+let isMouseDown = false;
 
-    function drawClock() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+let canSelectedDrawn=true;
 
-      // Fill the circle with a background color (gray)
-      ctx.fillStyle = '#F4F4F4'; 
-      ctx.beginPath();
-      ctx.arc(150, 118, 110, 0, Math.PI * 2);
-      ctx.fill();
+function drawClock() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw a small circle at the center of the clock
-      ctx.fillStyle = '#FBE8CE'; 
-      ctx.beginPath();
-      ctx.arc(150, 118, 5, 0, Math.PI * 2); 
-      ctx.fill();
-
-// Draw lines for the selected hour if any
-      drawLine();
-      
-// Draw hour labels for 12-hour format on the outer side
-for (let i = 0; i < hourCount; i++) {
-  const angle = (i * Math.PI) / 6 - Math.PI / 2; // Adjust angle: start from -90°
-  hourAngles.push(angle);
-  const x = 150 + Math.cos(angle) * outerRadius;
-  const y = 118 + Math.sin(angle) * outerRadius;
-  hourPositions.push({ x, y });
-
-  // Highlight the selected hour with a different background color
-  if (selectedHour === i) {
-    const hour=document.querySelector('.time-unit.hour').textContent=i  === 0 ? 12 : i.toString().padStart(2, '0'); 
-    const minute=document.querySelector('.time-unit.minute').textContent;
-    const second=document.querySelector('.time-unit.second').textContent;
-    formattedFullTime=hour+" : "+minute+" : "+second;
-    
-    document.querySelector('.date').value = formattedDate+" - "+formattedFullTime; 
+    // Fill the circle with a background color (gray)
+    ctx.fillStyle = '#F4F4F4';
     ctx.beginPath();
-    ctx.arc(x, y, 13, 0, Math.PI * 2); 
-    ctx.fillStyle = '#FBE8CE'; 
+    ctx.arc(centerX, centerY, clockRadius, 0, Math.PI * 2);
     ctx.fill();
-  }
 
-  ctx.font = "13px Arial";
-  ctx.fillStyle = '#4E4E4E'; 
-  ctx.fillText(i === 0 ? 12 : i, x - 5, y+5 ); // Adjust text for hour 12
+    // Draw a small circle at the center of the clock
+    ctx.fillStyle = '#FBE8CE';
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    drawLine();
+
+    if (currentMode === "hour") {
+        drawHourClock();
+    } else {
+        drawMinuteSecondClock();
+    }
+    canSelectedDrawn=true;
 }
 
-// Draw hour labels for 24-hour format on the inner side
-for (let i = 0; i < innerHourCount; i++) {
-  const angle = (i * Math.PI) / 6 - Math.PI / 2; // Adjust angle: start from -90°
-  innerHourAngles.push(angle);
-  const x = 150 + Math.cos(angle) * innerRadius;
-  const y = 118 + Math.sin(angle) * innerRadius;
-  innerHourPositions.push({ x, y });
+function drawHourClock() {
+    for (let i = 0; i < hourCount; i++) {
+        const angle = (i * Math.PI) / 6 - Math.PI / 2;
+        const xOuter = centerX + Math.cos(angle) * outerRadius;
+        const yOuter = centerY + Math.sin(angle) * outerRadius;
+        const xInner = centerX + Math.cos(angle) * innerRadius;
+        const yInner = centerY + Math.sin(angle) * innerRadius;
+        hourPositions[i] = { x: xOuter, y: yOuter };
+        innerHourPositions[i] = { x: xInner, y: yInner };
 
-  // Highlight the selected hour with a different background color
-  if (selectedInnerHour === i) {
-    const hour=document.querySelector('.time-unit.hour').textContent = i<1? `0${i}` : (12+i).toString().padStart(2, '0');
-    const minute=document.querySelector('.time-unit.minute').textContent;
-    const second=document.querySelector('.time-unit.second').textContent;
-    formattedFullTime=hour+" : "+minute+" : "+second;
-    
-    document.querySelector('.date').value = formattedDate+" - "+formattedFullTime; 
-    ctx.beginPath();
-    ctx.arc(x, y, 13, 0, Math.PI * 2); 
-    ctx.fillStyle = '#FBE8CE'; 
-    ctx.fill();
-  }
-  ctx.font = "13px Arial";
-  ctx.fillStyle = '#4E4E4E'; 
-  ctx.fillText(i < 1 ? `0${i}` : 12+i, x - 7, y + 5); // Zero-pad single-digit hours
+        if(canSelectedDrawn==true){
+            selectedPosition=currentSelectedTime.hour;
+        }
+
+        // Highlight outer circle
+        if (selectedPosition === i) {
+            ctx.beginPath();
+            ctx.arc(xOuter, yOuter, 13, 0, Math.PI * 2);
+            ctx.fillStyle = '#FBE8CE';
+            ctx.fill();
+        }
+
+        // Highlight inner circle
+        if (selectedPosition === i + hourCount) { // Adjust for inner circle positions
+            ctx.beginPath();
+            ctx.arc(xInner, yInner, 13, 0, Math.PI * 2);
+            ctx.fillStyle = '#FBE8CE';
+            ctx.fill();
+        }
+
+        ctx.font = "13px Arial";
+        ctx.fillStyle = '#4E4E4E';
+        ctx.fillText(i === 0 ? 12 : i, xOuter - 5, yOuter + 5);
+        ctx.fillText(i === 0 ? 12 : i, xInner - 5, yInner + 5);
+    }
+}
+
+function drawMinuteSecondClock() {
+    minutePositions.length = 0; // Clear previous positions
+    allMinutePositions.length = 0; // Clear all-minute positions
+    for (let i = 0; i < minuteCount; i++) {
+        const angle = (i * Math.PI) / 30 - Math.PI / 2; // Adjust for 60 divisions
+        const x = centerX + Math.cos(angle) * outerRadius;
+        const y = centerY + Math.sin(angle) * outerRadius;
+
+        allMinutePositions[i] = { x, y, value: i };
+
+        if (i % 5 === 0) {
+            minutePositions[i] = { x, y, value: i }; // Store only selectable positions
+        }
+
+        if (selectedPosition === i) {
+            ctx.beginPath();
+            ctx.arc(x, y, 13, 0, Math.PI * 2);
+            ctx.fillStyle = '#FBE8CE';
+            ctx.fill();
+        }
+
+        ctx.font = "13px Arial";
+        ctx.fillStyle = '#4E4E4E';
+        if (i % 5 === 0) ctx.fillText(i, x - 5, y + 5); // Display only multiples of 5
+    }
+}
+
+function drawLine() {
+    if (cursorX !== null && cursorY !== null && selectedPosition === null) {
+        const distFromCenter = Math.sqrt(
+            Math.pow(cursorX - centerX, 2) + Math.pow(cursorY - centerY, 2)
+        );
+
+        if (distFromCenter <= clockRadius) { // Only draw if cursor is inside the main circle
+            // Draw a line from the center to the cursor position
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(cursorX, cursorY);
+            ctx.strokeStyle = '#FBE8CE';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw the circle for the cursor
+            ctx.beginPath();
+            ctx.arc(cursorX, cursorY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#FBE8CE';
+            ctx.fill();
+        }
+    }
+
+    if (selectedPosition !== null) {
+        const positions = currentMode === "hour"
+            ? [...hourPositions, ...innerHourPositions]
+            : minutePositions;
+
+        const pos = positions[selectedPosition];
+        if (pos) {
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.strokeStyle = '#FBE8CE';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    }
 }
 
 
-      
-      
-    }
-
-    function drawLine() {
-      if (selectedHour !== null) {
-        const outerPos = hourPositions[selectedHour];
-        ctx.beginPath();
-        ctx.moveTo(150, 118);
-        ctx.lineTo(outerPos.x, outerPos.y);
-        ctx.strokeStyle = '#FBE8CE';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-
-      if (selectedInnerHour !== null) {
-        const innerPos = innerHourPositions[selectedInnerHour];
-        ctx.beginPath();
-        ctx.moveTo(150, 118);
-        ctx.lineTo(innerPos.x, innerPos.y);
-        ctx.strokeStyle = '#FBE8CE';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-    }
-
-    // Event listener to handle click on the clock
-    canvas.addEventListener('click', (event) => {
-      const x = event.offsetX;
-      const y = event.offsetY;
-
-      // Check for clicks on 12-hour format (outer circle)
-      for (let i = 0; i < hourCount; i++) {
-        const pos = hourPositions[i];
-        const dist = Math.sqrt(Math.pow(x - pos.x, 2) + Math.pow(y - pos.y, 2));
-        if (dist < 25) { // Adjusted radius to match highlighted area
-          selectedHour = i;
-          selectedInnerHour = null; // Deselect the inner circle if clicked on outer
-          break;
-        }
-      }
-
-      // Check for clicks on 24-hour format (inner circle)
-      for (let i = 0; i < innerHourCount; i++) {
-        const pos = innerHourPositions[i];
-        const dist = Math.sqrt(Math.pow(x - pos.x, 2) + Math.pow(y - pos.y, 2));
-        if (dist < 25) { // Adjusted radius to match highlighted area
-          selectedInnerHour = i;
-          selectedHour = null; // Deselect the outer circle if clicked on inner
-          break;
-        }
-      }
-
-      // Redraw the clock with the highlighted selection and line
-      drawClock();
-    });
-
-    // Initial draw of the clock
-    ctx.font = '16px Arial';
+function startDrag(event) {
+    isMouseDown = true;
+    updateCursorPosition(event);
+    handleSelection();
     drawClock();
-    
+}
+
+function drag(event) {
+    if (!isMouseDown) return;
+    updateCursorPosition(event);
+    handleSelection();
+    drawClock();
+}
+
+function stopDrag() {
+    isMouseDown = false;
+    drawClock();
+}
+
+function singleClick(event) {
+    updateCursorPosition(event);
+    handleSelection();
+    drawClock();
+}
+
+function updateCursorPosition(event) {
+    canSelectedDrawn=false;
+    const rect = canvas.getBoundingClientRect();
+    cursorX = event.clientX - rect.left;
+    cursorY = event.clientY - rect.top;
+}
+
+function handleSelection() {
+    let found = false;
+
+    if (currentMode === "hour") {
+        for (let i = 0; i < hourPositions.length; i++) {
+            const { x, y } = hourPositions[i];
+            const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
+            if (dist < 13) {
+                selectedPosition = i;
+                found = true;
+                break;
+            }
+        }
+
+        for (let i = 0; i < innerHourPositions.length; i++) {
+            const { x, y } = innerHourPositions[i];
+            const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
+            if (dist < 13) {
+                selectedPosition = i + hourCount;
+                found = true;
+                break;
+            }
+        }
+    } else {
+        // Check selectable minute positions (multiples of 5)
+        for (let i = 0; i < minutePositions.length; i++) {
+            const { x, y, value } = minutePositions[i] || {};
+            const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
+            if (dist < 5) {
+                selectedPosition = i;
+                found = true;
+                console.log(`Selected minute: ${value}`);
+                document.getElementById('time-unitminuteID').textContent=value;
+                break;
+            }
+        }
+
+        // Log all minutes (non-selectable and selectable)
+        if (!found) {
+            for (let i = 0; i < allMinutePositions.length; i++) {
+                const { x, y, value } = allMinutePositions[i] || {};
+                const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
+                if (dist < 13) {
+                    console.log(`Minute on clock (non-selectable): ${value}`);
+                    document.getElementById('time-unitminuteID').textContent=value;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!found) {
+        selectedPosition = null;
+    }
+}
+
+
+function switchToMode(mode) {
+    currentMode = mode;
+    selectedPosition = null;
+    drawClock();
+}
+
+document.getElementById('time-unithourId').addEventListener('click', () => {
+    this.classList.add('selectedMode');
+    document.getElementById('time-unithourId').classList.remove('selectedMode');
+    outerRadius = clockRadius - 50;
+    innerRadius = clockRadius - 20;
+    switchToMode("hour");
+});
+
+document.getElementById('time-unitminuteID').addEventListener('click', () => {
+    this.classList.add('selectedMode');
+    document.getElementById('time-unitminuteID').classList.remove('selectedMode');
+    outerRadius = clockRadius - 20;
+    switchToMode("minute");
+});
+
+document.getElementById('time-unitsecondID').addEventListener('click', () => {
+    outerRadius = clockRadius - 20;
+    switchToMode("second");
+});
+
+canvas.addEventListener('mousedown', startDrag);
+canvas.addEventListener('mousemove', drag);
+canvas.addEventListener('mouseup', stopDrag);
+canvas.addEventListener('mouseleave', stopDrag);
+canvas.addEventListener('click', singleClick);
+
+ctx.font = '16px Arial';
+drawClock();
+
+
+
+let currentSelectedDate = null;
+
+
+function setTime(hour, minute, second ) {
+    // Update global variables for the selected time
+    currentSelectedTime.hour = hour;
+    currentSelectedTime.minute = minute;
+    currentSelectedTime.second
+
+
+    // Automatically redraw the clock based on the current mode
+    if (currentMode === "hour") {
+        selectedPosition = currentSelectedTime.hour % 12; // Convert to 12-hour format
+    } else if (currentMode === "minute") {
+        selectedPosition = currentSelectedTime.minute; // Directly use minute
+    } else if (currentMode === "second") {
+        selectedPosition = currentSelectedTime.second; // Directly use second
+    }
+
+    drawClock(); // Redraw the clock
+}
+
+// Event listener for imgTimeNowId
+document.getElementById('imgTimeNowId').addEventListener('click', () => {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    console.log(`Setting current time: ${currentHour}:${currentMinute}`);
+    setTime(currentHour, currentMinute);
+});
+
+// Updated handleSelection for logging all minutes
+function handleSelection() {
+    let found = false;
+
+    if (currentMode === "hour") {
+        for (let i = 0; i < hourPositions.length; i++) {
+            const { x, y } = hourPositions[i];
+            const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
+            if (dist < 13) {
+                selectedPosition = i;
+                found = true;
+                currentSelectedTime.hour = i; // Update selected hour
+                break;
+            }
+        }
+
+        for (let i = 0; i < innerHourPositions.length; i++) {
+            const { x, y } = innerHourPositions[i];
+            const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
+            if (dist < 13) {
+                selectedPosition = i + hourCount;
+                found = true;
+                currentSelectedTime.hour = i + 12; // Update selected inner hour
+                break;
+            }
+        }
+    } else {
+        for (let i = 0; i < minutePositions.length; i++) {
+            const { x, y, value } = minutePositions[i] || {};
+            const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
+            if (dist < 5) {
+                selectedPosition = i;
+                found = true;
+                currentSelectedTime.minute = value; // Update selected minute
+                console.log(`Selected minute: ${value}`);
+                document.getElementById('time-unitminuteID').textContent = value;
+                break;
+            }
+        }
+
+        if (!found) {
+            for (let i = 0; i < allMinutePositions.length; i++) {
+                const { x, y, value } = allMinutePositions[i] || {};
+                const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
+                if (dist < 13) {
+                    console.log(`Minute on clock (non-selectable): ${value}`);
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!found) {
+        selectedPosition = null;
+    }
+}
+
+
+
+
+
+
 
     </script>
 
