@@ -334,6 +334,7 @@ width: 300px;
             margin-left: 8px; 
             font-weight: normal;
             text-decoration: underline;
+            display: none;
         }
 
         .time-container .minute:hover{
@@ -409,7 +410,7 @@ width: 300px;
 
     <div id="clock" class="clock-container" hidden>
         <div class="time-container">
-            <span id="time-unithourId" class="time-unit hour">10</span><span id="colonId" class="colon">:</span>
+            <span id="time-unithourId" class="time-unit hour">14</span><span id="colonId" class="colon">:</span>
             <span id="time-unitminuteID" class="time-unit minute">00</span><span class="colon">:</span>
             <span id="time-unitsecondID" class="time-unit second">00</span>
             <span id="hourformatId" class="hourformat">PM</span>
@@ -420,17 +421,17 @@ width: 300px;
                 <div id="imgTimeNowId" class="imgTimeNow">
                     <img src="TimeNow.svg" alt="TimeNow">
                 </div>
-                <div class="imgMorning">
+                <div id="imgMorningId" class="imgMorning">
                     <img src="Morning.svg" alt="Morning">
                 </div>
-                <div class="imgDay">
+                <div id="imgDayId" class="imgDay">
                     <img src="Day.svg" alt="Day">
                 </div>
-                <div class="imgEvening">
+                <div id="imgEveningId" class="imgEvening">
                     <img src="Night.svg" alt="Night">
                 </div>
                 <div class="okBtnClass">
-                <button id="okBtn"><img src="Ok.svg">
+                <button id="okTimeBtn"><img src="Ok.svg">
                     <div class="okText" style="width: fit-content; min-width: fit-content;">Ok</div>
                 </button>
             </div>
@@ -446,12 +447,14 @@ width: 300px;
 
 
         let currentYear, currentMonth;
-        let currentSelectedTime = { hour: 0, minute: 0 }; // Default to 12:00
+        let currentSelectedTime = { hour: 2, minute: 0, second: 0 }; // Default to 12:00
 
         const months = [
                 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
             ];
+
+            
 
 function getYears() {
     const d = new Date();
@@ -609,6 +612,7 @@ window.onload = function () {
     generateDaysOfWeek();
     generateDaysOfMonth();
 
+
     // Initialize hidden elements
     const rootDiv = document.querySelector('.root');
     const datepicker = document.getElementById('datepicker');
@@ -694,12 +698,14 @@ const hourPositions = [];
 const innerHourPositions = [];
 const minutePositions = [];
 const allMinutePositions = []; // Holds positions for all minutes
-let selectedPosition = null;
+let selectedPosition = 14;
 let cursorX = null;
 let cursorY = null;
 let isMouseDown = false;
 
 let canSelectedDrawn=true;
+
+calculatePositions();
 
 function drawClock() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -719,6 +725,7 @@ function drawClock() {
     drawLine();
 
     if (currentMode === "hour") {
+        selectedPosition=14;
         drawHourClock();
     } else {
         drawMinuteSecondClock();
@@ -726,7 +733,7 @@ function drawClock() {
     canSelectedDrawn=true;
 }
 
-function drawHourClock() {
+function calculatePositions(){
     for (let i = 0; i < hourCount; i++) {
         const angle = (i * Math.PI) / 6 - Math.PI / 2;
         const xOuter = centerX + Math.cos(angle) * outerRadius;
@@ -735,6 +742,25 @@ function drawHourClock() {
         const yInner = centerY + Math.sin(angle) * innerRadius;
         hourPositions[i] = { x: xOuter, y: yOuter };
         innerHourPositions[i] = { x: xInner, y: yInner };
+    }
+
+    for (let i = 0; i < minuteCount; i++) {
+        const angle = (i * Math.PI) / 30 - Math.PI / 2; // Adjust for 60 divisions
+        const x = centerX + Math.cos(angle) * outerRadius;
+        const y = centerY + Math.sin(angle) * outerRadius;
+
+        allMinutePositions[i] = { x, y, value: i };
+    }
+}
+
+function drawHourClock() {
+    for (let i = 0; i < hourCount; i++) {
+
+        const xOuter = hourPositions[i].x;
+        const yOuter = hourPositions[i].y;
+        const xInner = innerHourPositions[i].x;
+        const yInner = innerHourPositions[i].y;
+
 
         if(canSelectedDrawn==true){
             selectedPosition=currentSelectedTime.hour;
@@ -743,7 +769,7 @@ function drawHourClock() {
         // Highlight outer circle
         if (selectedPosition === i) {
             ctx.beginPath();
-            ctx.arc(xOuter, yOuter, 13, 0, Math.PI * 2);
+            ctx.arc(xInner, yInner, 13, 0, Math.PI * 2);
             ctx.fillStyle = '#FBE8CE';
             ctx.fill();
         }
@@ -751,32 +777,37 @@ function drawHourClock() {
         // Highlight inner circle
         if (selectedPosition === i + hourCount) { // Adjust for inner circle positions
             ctx.beginPath();
-            ctx.arc(xInner, yInner, 13, 0, Math.PI * 2);
+            ctx.arc(xOuter, yOuter, 13, 0, Math.PI * 2);
             ctx.fillStyle = '#FBE8CE';
             ctx.fill();
         }
 
         ctx.font = "13px Arial";
         ctx.fillStyle = '#4E4E4E';
-        ctx.fillText(i === 0 ? 12 : i, xOuter - 5, yOuter + 5);
+        ctx.fillText(i === 0 ? 12 : i+12, xOuter - 5, yOuter + 5);
         ctx.fillText(i === 0 ? 12 : i, xInner - 5, yInner + 5);
     }
 }
 
 function drawMinuteSecondClock() {
     minutePositions.length = 0; // Clear previous positions
-    allMinutePositions.length = 0; // Clear all-minute positions
+    //allMinutePositions.length = 0; // Clear all-minute positions
     for (let i = 0; i < minuteCount; i++) {
-        const angle = (i * Math.PI) / 30 - Math.PI / 2; // Adjust for 60 divisions
-        const x = centerX + Math.cos(angle) * outerRadius;
-        const y = centerY + Math.sin(angle) * outerRadius;
 
-        allMinutePositions[i] = { x, y, value: i };
+        const x = allMinutePositions[i].x;
+        const y = allMinutePositions[i].y;
+
+        if(canSelectedDrawn==true && currentMode === "minute"){
+            selectedPosition=currentSelectedTime.minute;
+        }else{
+            selectedPosition=currentSelectedTime.second;
+        }
 
         if (i % 5 === 0) {
             minutePositions[i] = { x, y, value: i }; // Store only selectable positions
         }
 
+        
         if (selectedPosition === i) {
             ctx.beginPath();
             ctx.arc(x, y, 13, 0, Math.PI * 2);
@@ -788,6 +819,7 @@ function drawMinuteSecondClock() {
         ctx.fillStyle = '#4E4E4E';
         if (i % 5 === 0) ctx.fillText(i, x - 5, y + 5); // Display only multiples of 5
     }
+    //selectedPosition=null;
 }
 
 function drawLine() {
@@ -795,7 +827,7 @@ function drawLine() {
         const distFromCenter = Math.sqrt(
             Math.pow(cursorX - centerX, 2) + Math.pow(cursorY - centerY, 2)
         );
-
+     
         if (distFromCenter <= clockRadius) { // Only draw if cursor is inside the main circle
             // Draw a line from the center to the cursor position
             ctx.beginPath();
@@ -810,13 +842,19 @@ function drawLine() {
             ctx.arc(cursorX, cursorY, 5, 0, Math.PI * 2);
             ctx.fillStyle = '#FBE8CE';
             ctx.fill();
+            selectedPosition=null;
         }
     }
+  
+    
 
     if (selectedPosition !== null) {
         const positions = currentMode === "hour"
-            ? [...hourPositions, ...innerHourPositions]
-            : minutePositions;
+    ? [...innerHourPositions, ...hourPositions]
+    : currentMode === "minute" || currentMode === "second"
+    ? allMinutePositions
+    : [];
+
 
         const pos = positions[selectedPosition];
         if (pos) {
@@ -847,6 +885,11 @@ function drag(event) {
 
 function stopDrag() {
     isMouseDown = false;
+    if(currentMode=="hour"){
+        //currentMode = "minute";
+        selectedPosition=currentSelectedTime.hour;
+    }
+
     drawClock();
 }
 
@@ -861,9 +904,10 @@ function updateCursorPosition(event) {
     const rect = canvas.getBoundingClientRect();
     cursorX = event.clientX - rect.left;
     cursorY = event.clientY - rect.top;
+    drawClock();
 }
 
-function handleSelection() {
+/*function handleSelection() {
     let found = false;
 
     if (currentMode === "hour") {
@@ -871,7 +915,7 @@ function handleSelection() {
             const { x, y } = hourPositions[i];
             const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
             if (dist < 13) {
-                selectedPosition = i;
+                selectedPosition = i + hourCount;
                 found = true;
                 break;
             }
@@ -881,7 +925,7 @@ function handleSelection() {
             const { x, y } = innerHourPositions[i];
             const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
             if (dist < 13) {
-                selectedPosition = i + hourCount;
+                selectedPosition = i;
                 found = true;
                 break;
             }
@@ -917,33 +961,63 @@ function handleSelection() {
     if (!found) {
         selectedPosition = null;
     }
-}
+}*/
 
 
-function switchToMode(mode) {
+function switchToMode(mode, selPosition) {
     currentMode = mode;
-    selectedPosition = null;
-    drawClock();
+    selectedPosition = selPosition; // Reset to ensure new mode doesn't conflict
+    cursorX = null; // Reset cursor position
+    cursorY = null;
+    drawClock(); // Redraw the clock with updated mode
 }
+
+
+
 
 document.getElementById('time-unithourId').addEventListener('click', () => {
-    this.classList.add('selectedMode');
-    document.getElementById('time-unithourId').classList.remove('selectedMode');
+    //this.classList.add('selectedMode');
+   // document.getElementById('time-unithourId').classList.remove('selectedMode');
+   document.getElementById('time-unithourId').style.color="orange";
+    document.getElementById('time-unitminuteID').style.color="black";
+    document.getElementById('time-unitsecondID').style.color="black";
     outerRadius = clockRadius - 50;
     innerRadius = clockRadius - 20;
-    switchToMode("hour");
+    //currentMode="hour";
+    //drawClock();
+    switchToMode("hour", currentSelectedTime.hour);
 });
 
 document.getElementById('time-unitminuteID').addEventListener('click', () => {
-    this.classList.add('selectedMode');
-    document.getElementById('time-unitminuteID').classList.remove('selectedMode');
+    //this.classList.add('selectedMode');
+    //document.getElementById('time-unitminuteID').classList.remove('selectedMode');
+    document.getElementById('time-unithourId').style.color="black";
+    document.getElementById('time-unitminuteID').style.color="orange";
+    document.getElementById('time-unitsecondID').style.color="black";
     outerRadius = clockRadius - 20;
-    switchToMode("minute");
+    currentMode="minute";
+    //drawClock();
+    switchToMode("minute", currentSelectedTime.minute);
 });
 
 document.getElementById('time-unitsecondID').addEventListener('click', () => {
+    document.getElementById('time-unithourId').style.color="black";
+    document.getElementById('time-unitminuteID').style.color="black";
+    document.getElementById('time-unitsecondID').style.color="orange";
     outerRadius = clockRadius - 20;
-    switchToMode("second");
+    //currentMode="second";
+    //drawClock();
+    switchToMode("second", currentSelectedTime.second);
+});
+
+document.getElementById('okTimeBtn').addEventListener('click', () => {
+    const rootDiv = document.querySelector('.root');
+    const formattedDate = getSelectedDate(); 
+    if (formattedDate) {
+        const inputField = document.querySelector('.date');
+        inputField.value = formattedDate+" - "+ String(currentSelectedTime.hour).padStart(2, '0')+" : "+ String(currentSelectedTime.minute).padStart(2, '0'); // Set the selected date in the input
+    }
+    rootDiv.hidden = true; 
 });
 
 canvas.addEventListener('mousedown', startDrag);
@@ -959,35 +1033,76 @@ drawClock();
 
 let currentSelectedDate = null;
 
+let unitHour=document.getElementById('time-unithourId');
+let unitMinute=document.getElementById('time-unitminuteID');
+let unitSecond=document.getElementById('time-unitsecondID');
 
 function setTime(hour, minute, second ) {
     // Update global variables for the selected time
     currentSelectedTime.hour = hour;
     currentSelectedTime.minute = minute;
-    currentSelectedTime.second
-
+    currentSelectedTime.second=second;
+    console.log("sel: "+currentSelectedTime.hour);
 
     // Automatically redraw the clock based on the current mode
     if (currentMode === "hour") {
-        selectedPosition = currentSelectedTime.hour % 12; // Convert to 12-hour format
+        if (hour <= 12) {
+            selectedPosition = hour === 12 ? 0 : hour; // Outer circle
+        } else {
+            selectedPosition = hour - 12 + hourCount; // Inner circle
+        }
+
     } else if (currentMode === "minute") {
         selectedPosition = currentSelectedTime.minute; // Directly use minute
+        
     } else if (currentMode === "second") {
         selectedPosition = currentSelectedTime.second; // Directly use second
     }
-
+    unitHour.textContent=currentSelectedTime.hour;
+        unitMinute.textContent=String(currentSelectedTime.minute).padStart(2, '0');
+        unitSecond.textContent=String(currentSelectedTime.second).padStart(2, '0');
     drawClock(); // Redraw the clock
 }
+
 
 // Event listener for imgTimeNowId
 document.getElementById('imgTimeNowId').addEventListener('click', () => {
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
+    const currentSecond=now.getSeconds();
 
-    console.log(`Setting current time: ${currentHour}:${currentMinute}`);
-    setTime(currentHour, currentMinute);
+    //console.log(`Setting current time: ${currentHour}:${currentMinute}`);
+    setTime(currentHour, currentMinute, currentSecond);
 });
+
+// Event listener for imgTimeNowId
+document.getElementById('imgMorningId').addEventListener('click', () => {
+
+    //console.log(`Setting current time: ${currentHour}:${currentMinute}`);
+    setTime(8, 0, 0);
+});
+
+// Event listener for imgTimeNowId
+document.getElementById('imgDayId').addEventListener('click', () => {
+
+    const currentHour = 12;
+    const currentMinute = 0;
+
+    //console.log(`Setting current time: ${currentHour}:${currentMinute}`);
+    setTime(12, 0, 0);
+});
+
+// Event listener for imgTimeNowId
+document.getElementById('imgEveningId').addEventListener('click', () => {
+
+    const currentHour = 18;
+    const currentMinute = 0;
+
+    //console.log(`Setting current time: ${currentHour}:${currentMinute}`);
+    setTime(18, 0, 0);
+});
+
 
 // Updated handleSelection for logging all minutes
 function handleSelection() {
@@ -998,10 +1113,16 @@ function handleSelection() {
             const { x, y } = hourPositions[i];
             const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
             if (dist < 13) {
-                selectedPosition = i;
+                selectedPosition = i+12;
                 found = true;
-                currentSelectedTime.hour = i; // Update selected hour
+                currentSelectedTime.hour = i+12; // Update selected hour
+                console.log("only pos "+selectedPosition);
+                console.log("cur sel "+currentSelectedTime.hour);
+                document.getElementById('time-unithourId').textContent = currentSelectedTime.hour;
                 break;
+            }else{
+                selectedPosition=null;
+                currentSelectedTime.hour=null;
             }
         }
 
@@ -1009,9 +1130,12 @@ function handleSelection() {
             const { x, y } = innerHourPositions[i];
             const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
             if (dist < 13) {
-                selectedPosition = i + hourCount;
+                selectedPosition = i;
                 found = true;
-                currentSelectedTime.hour = i + 12; // Update selected inner hour
+                currentSelectedTime.hour = i ; // Update selected inner hour
+                console.log("only pos "+selectedPosition);
+                console.log("cur sel "+currentSelectedTime.hour);
+                document.getElementById('time-unithourId').textContent = currentSelectedTime.hour;
                 break;
             }
         }
@@ -1022,10 +1146,21 @@ function handleSelection() {
             if (dist < 5) {
                 selectedPosition = i;
                 found = true;
-                currentSelectedTime.minute = value; // Update selected minute
-                console.log(`Selected minute: ${value}`);
-                document.getElementById('time-unitminuteID').textContent = value;
+                if(currentMode === "minute"){
+                    currentSelectedTime.minute = value; // Update selected minute
+                    document.getElementById('time-unitminuteID').textContent = String(value).padStart(2, '0');
+                }else{
+                    currentSelectedTime.second = value; // Update selected minute
+                    document.getElementById('time-unitsecondID').textContent = String(value).padStart(2, '0');
+                }
+
+                //console.log(`Selected minute: ${value}`);
+                
                 break;
+            }else{
+                selectedPosition=null;
+                currentSelectedTime.minute=null;
+                currentSelectedTime.second=null;
             }
         }
 
@@ -1034,7 +1169,8 @@ function handleSelection() {
                 const { x, y, value } = allMinutePositions[i] || {};
                 const dist = Math.sqrt(Math.pow(cursorX - x, 2) + Math.pow(cursorY - y, 2));
                 if (dist < 13) {
-                    console.log(`Minute on clock (non-selectable): ${value}`);
+                   // console.log(`Minute on clock (non-selectable): ${value}`);
+                   document.getElementById('time-unitminuteID').textContent = String(value).padStart(2, '0');
                     break;
                 }
             }
