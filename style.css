@@ -1,0 +1,350 @@
+.date {
+    height: 40px;
+    width: 140px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+    padding-left: 15px;            
+}
+
+input::placeholder {
+    color: gray;
+    margin-left: 20px;
+}
+
+.datepicker-container {
+    height: 330px;
+    width: 300px;
+    flex-direction: column;            
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.root{
+    height: 380px;
+    width: 300px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dateortine {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 300px;
+    height: 40px;
+    font-weight: bold; 
+}
+
+.dateortine button {
+    font-family: Arial, sans-serif;
+    flex: 1;
+    font-size: 16px;
+    padding: 5px 10px;
+    cursor: pointer;
+    float: left;
+    border: none;
+    background-color: #EAEAEA;
+    color: #7D7D7D;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.month-buttons button{
+    font-family: Arial, sans-serif;
+    flex: 1;
+    font-size: 16px;
+    padding: 5px 10px;
+    cursor: pointer;
+    float: left;
+    border: none;
+    background-color: #FFFFFF;
+    color: #7D7D7D;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.confirm-buttons button {
+    font-family: Arial, sans-serif;
+    flex: 1;
+
+    cursor: pointer;
+    float: left;
+    border: none;
+
+   gap: 8px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+
+}
+
+.dateortine button:hover {
+    background-color: white;
+
+}
+
+/* Selected State */
+.dateortine button.selected-tab {
+    background-color: white;
+    color: #000;
+    font-weight: bold;
+}
+
+.time-container .selectedMode{
+    color: orange;
+}
+
+.dateortine img{
+   
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.dateortine img::selecte {
+    background-color: #2110b6 ;
+}
+
+.month-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;           
+    padding: 0;
+    align-items: center;
+}
+
+.days-of-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns for the days of the week */
+    gap: 5px;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    text-align: center;
+    
+}
+
+.day {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.day:hover {
+    background-color: #ddd;
+}
+
+.selected {
+    background-color: #3F51B5;
+    color: white;
+}
+
+.okBtnClass{
+    display: flex;
+justify-content: flex-start; /* Default alignment for other elements */
+position: relative;  
+margin-left: auto;  /* Pushes the button to the right */
+margin-right: 21px; /* Adds the 21px gap to the right */
+width: 51px;
+height: 20px;
+}
+
+
+
+
+.faded {
+color: rgba(0, 0, 0, 0.4); 
+width: 10px;
+height: 10px;
+}
+
+.day.past {
+color: rgba(0, 0, 0, 0.4); 
+}
+
+
+
+
+.days-of-month {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 10px;
+    padding: 10px;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding-right: 15px;
+    width: 283px;
+    height: 38px;
+}
+
+.input-container input {
+    flex: 1;
+    border: none;
+    outline: none;
+
+}
+
+.input-container img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+
+}
+
+
+
+.empty {
+    visibility: hidden; 
+}
+
+.year{
+    display:flex;
+    flex-direction: column;
+    position:relative;
+    display: inline-block;
+    font-size: 16px;
+    border: none;
+    font-family: Arial;
+    width: 100px;
+    appearance: none;
+background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+background-repeat: no-repeat;
+background-position: right 0.7rem top 50%;
+background-size: 0.65rem auto;
+}
+
+.year select:focus {
+    outline: none;
+    border: none; 
+}
+
+
+.days-of-week {
+display: flex;
+justify-content: space-around; 
+border-bottom: 1px solid rgba(0, 0, 0, 0.5); 
+padding-bottom: 5px; 
+}
+
+
+.days-of-week .day-of-week {
+color: rgba(0, 0, 0, 0.5); 
+text-align: center;
+flex: 1; 
+}
+
+
+
+
+.day.disabled {
+color: rgba(0, 0, 0, 0.3); 
+cursor: not-allowed;
+pointer-events: none; 
+background-color: rgb(255, 255, 255); 
+}
+
+.clock-container{
+
+height: 340px;
+width: 300px;
+}
+
+.confirm-buttons {
+display: flex;
+margin-left: 21px;
+margin-bottom: 13px;
+gap: 20px;
+}
+
+.confirm-buttons img{
+width: 20px;
+height: 20px;
+}
+
+.okBtnClasstn {
+width: 51px;
+height: 20px;
+}
+
+.confirm-buttons button {
+border: none; 
+background: none; 
+font-size: 14px;
+cursor: pointer;
+}
+
+.confirm-buttons button:hover{
+background-color: #ddd;
+}
+
+.confirm-buttons div:hover{
+background-color: #ddd;
+}
+
+.time-container {
+    font-family: Arial, sans-serif;
+    font-size: 40px;
+    display: flex;
+    justify-content: center; /* Vízszintesen középre */
+    align-items: center; 
+    width: 300px;
+    height: 67px;
+    border-bottom: 1px solid #EAEAEA; 
+    text-underline-offset: 8px;
+    cursor: pointer;
+}
+.time-container .minute {
+    text-decoration: underline;
+}
+.time-container .second {
+    text-decoration: underline;
+}
+.time-container .hour {
+    color: orange;
+    text-decoration: underline;
+}
+.time-container .colon {
+    text-decoration: none;
+}
+.time-container .hourformat {
+    margin-left: 8px; 
+    font-weight: normal;
+    text-decoration: underline;
+    display: none;
+}
+
+.time-container .minute:hover{
+    color: orange;
+}
+
+.time-container .hour:hover{
+    color: orange;
+}
+
+.time-container .second:hover{
+    color: orange;
+}
+
+.time-container .hourformat:hover{
+    color: orange;
+}
