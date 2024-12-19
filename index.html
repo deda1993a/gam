@@ -14,10 +14,10 @@
     <div class="root">
         <div id="datetinesel" class="dateortine">
 
-            <button id="dateBtn"><img src="Calendar.svg" alt="time" style="width: fit-content; min-width: fit-content;">
+            <button id="dateBtn"><img id="CalendarSVG" src="Calendar.svg" alt="time" style="width: fit-content; min-width: fit-content;">
                 <div class="dateBtnText">Date</div>
             </button>
-            <button id="timeBtn"><img src="Time.svg">
+            <button id="timeBtn"><img id="TimeSVG" src="Time.svg">
                 <div class="timeBtnText" style="width: fit-content; min-width: fit-content;">Time</div>
             </button>
         </div>
@@ -28,8 +28,8 @@
         <div id="month" class="month-buttons">
             <select class="year" id="yearSelect"></select>
             <div class="navBtns">
-            <button id="prevMonthBtn">&lt;</button>            
-            <button id="nextMonthBtn">&gt;</button>
+            <img id="prevMonthBtn" src="ArrowLeft.svg">           
+            <img id="nextMonthBtn" src="ArrowRight.svg">
             </div>
         </div>
 
@@ -39,8 +39,8 @@
         <div class="days-of-month" id="daysOfMonth"></div>
 
         <div class="confirm-container">
-            <div class="confirm-buttons">
-                <button id="cancelBtn"><img src="clearBtn.png" alt="time">
+            <div class="confirm-buttonsCalendar">
+                <button id="cancelBtn"><img src="Clear.svg" alt="time">
                     <div class="cancelBtnText" style="width: fit-content; min-width: fit-content;">Clear</div>
                 </button>
                 <button id="okBtn"><img src="Ok.svg">
@@ -53,11 +53,11 @@
     
 
     <div id="clock" class="clock-container" hidden>
-        <div class="time-container">
+        <div class="time-container" id="time-containerId">
             <span id="time-unithourId" class="time-unit hour">14</span><span id="colonId" class="colon">:</span>
             <span id="time-unitminuteID" class="time-unit minute">00</span><span class="colon">:</span>
             <span id="time-unitsecondID" class="time-unit second">00</span>
-            <span id="hourformatId" class="hourformat">PM</span>
+            <span id="hourformatId" class="hourformat" style="display: none;">PM</span>
         </div>
         <canvas id="clockCanvas" width="300" height="236"></canvas>
         <div class="confirm-time-container">
