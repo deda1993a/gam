@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" id="psdatepicker-htmlId" class="psdatepicker-html">
+<head>
+    <link rel="stylesheet" href="psdatepicker.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Date Picker</title>
+</head>
+<body>
+    <div id="psdatepicker-input-containerId" class="psdatepicker-input-container">
+    <input type="text" id="psdatepicker-dateId" class="psdatepicker-date" placeholder="DD.MM.YYYY - HH:MM" disabled inputmode="">
+    <img id="psdatepicker-dateimg" src="DateTime.svg">
+    </div>
+    <div id="psdatepicker-rootId" class="psdatepicker-root" onload="preLoad()">
+        <div id="psdatepicker-datetinesel" class="psdatepicker-dateortine">
+            <button id="psdatepicker-dateBtn"><img id="psdatepicker-CalendarSVG" src="Calendar.svg" alt="time" style="width: fit-content; min-width: fit-content;">
+                <div class="psdatepicker-dateBtnText">Date</div>
+            </button>
+            <button id="psdatepicker-timeBtn"><img id="psdatepicker-TimeSVG" src="Time.svg">
+                <div class="psdatepicker-timeBtnText" style="width: fit-content; min-width: fit-content;">Time</div>
+            </button>
+        </div>
+            <div id="psdatepicker-datepicker" class="psdatepicker-datepicker-container">
+        
+                <div id="psdatepicker-month" class="psdatepicker-month-buttons">
+                    <select class="psdatepicker-year" id="psdatepicker-yearSelect"></select>
+                    <div class="psdatepicker-navBtns">
+                    <img id="psdatepicker-prevMonthBtn" src="ArrowLeft.svg">           
+                    <img id="psdatepicker-nextMonthBtn" src="ArrowRight.svg">
+                    </div>
+                </div>
+
+                <div class="psdatepicker-days-of-week" id="psdatepicker-daysOfWeek"></div>
+                <div class="psdatepicker-days-of-month" id="psdatepicker-daysOfMonth"></div>
+                <div class="psdatepicker-confirm-container">
+                    <div class="psdatepicker-confirm-buttonsCalendar">
+                        <button id="psdatepicker-cancelBtn"><img src="Clear.svg" alt="time">
+                            <div class="psdatepicker-cancelBtnText" style="width: fit-content; min-width: fit-content;">Clear</div>
+                        </button>
+                        <button id="psdatepicker-okBtn"><img src="Ok.svg">
+                            <div class="psdatepicker-okBtnText" style="width: fit-content; min-width: fit-content;">Ok</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+    
+
+    <div id="psdatepicker-clock" class="psdatepicker-clock-container" hidden>
+        <div class="psdatepicker-time-container" id="psdatepicker-time-containerId">
+            <span id="psdatepicker-time-unithourId" class="psdatepicker-time-unit hour">1</span><span id="psdatepicker-colonId" class="psdatepicker-colon">:</span>
+            <span id="psdatepicker-time-unitminuteID" class="psdatepicker-time-unit minute">00</span><span class="psdatepicker-colon">:</span>
+            <span id="psdatepicker-time-unitsecondID" class="psdatepicker-time-unit second">00</span>
+            <span id="psdatepicker-hourformatId" class="psdatepicker hourformat" style="display: none;">AM</span>
+        </div>
+        <canvas id="psdatepicker-clockCanvas" width="300" height="236"></canvas>
+        <div class="psdatepicker-confirm-time-container">
+            <div class="psdatepicker-confirm-buttons">
+                <div id="psdatepicker-imgTimeNowId" class="psdatepicker-imgTimeNow" onclick="psdatepicker_timeSlctBtn('now')">
+                    <img src="TimeNow.svg" alt="TimeNow">
+                </div>
+                <div id="psdatepicker-imgMorningId" class="psdatepicker-imgMorning" onclick="psdatepicker_timeSlctBtn('morning')">
+                    <img src="Morning.svg" alt="Morning">
+                </div>
+                <div id="psdatepicker-imgDayId" class="psdatepicker-imgDay" onclick="psdatepicker_timeSlctBtn('day')">
+                    <img src="Day.svg" alt="Day">
+                </div>
+                <div id="psdatepicker-imgEveningId" class="psdatepicker-imgEvening" onclick="psdatepicker_timeSlctBtn('night')">
+                    <img src="Night.svg" alt="Night">
+                </div>
+                <div class="psdatepicker-okBtnClass">
+                <button id="psdatepicker-okTimeBtn"><img src="Ok.svg">
+                    <div class="psdatepicker-okText" style="width: fit-content; min-width: fit-content;">Ok</div>
+                </button>
+            </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="psdatepicker.js"></script>
+
+</body>
+</html>
