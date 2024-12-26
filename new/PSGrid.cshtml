@@ -1,0 +1,141 @@
+﻿@page
+@{
+}
+@section Heads {
+    <link href="PSGrid.css" rel="stylesheet" asp-append-version="true"/>
+    <script src="PSGrid.js" asp-append-version="true"></script>
+    <link href="../PSToggleButton/PSToggleButton.css" rel="stylesheet" asp-append-version="true" />
+    <script src="../PSToggleButton/PSToggleButton.js" asp-append-version="true"></script>
+}
+<h2>Hola</h2>
+
+
+<div style="width: 1120px;">
+
+    <div id="grid" class="psgrid">
+
+        <div class="psgrid-top-container">
+            <div class="psgrid-filter-container">
+                <div id="pstogglebutton" class="pstogglebutton">
+                    <button class="pstogglebutton-button" data-selected="false" onclick="onclickmsg('1');">
+                        <img class="pstogglebutton-img" src="/pslib/image/PS_imgCheck.svg" />
+                        <div class="pstogglebutton-text">Text</div>
+                    </button>
+                    <button class="pstogglebutton-button" data-selected="false" disabled onclick="onclickmsg('2');">
+                        <img class="pstogglebutton-img" src="/pslib/image/PS_imgCheck.svg" />
+                        <div class="pstogglebutton-text">Text</div>
+                    </button>
+                    <button class="pstogglebutton-button" data-selected="true" onclick="onclickmsg('3');">
+                        <img class="pstogglebutton-img" src="/pslib/image/PS_imgCheck.svg" />
+                        <div class="pstogglebutton-text">Text</div>
+                    </button>
+
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('#pstogglebutton').initToggleButton();
+                        });
+
+                        function onclickmsg(txt) {
+                            //alert(txt);
+                        }
+                    </script>
+                </div>
+            </div>
+            <div class="psgrid-search-container">
+                <input type="text" name="psgrid-search" placeholder="Type a keyword">
+                <button name="psgrid-search-button" class="psgrid-search-button" type="submit" data-isempty="false">
+                </button>
+            </div>
+
+        </div>
+        <div class="psgrid-container-table" style="height: 248px">
+            <table class="psgrid-table">
+                <thead class="psgrid-table-head" name="psgrid-header">
+                    <tr class="psgrid-thead-row">
+                        <th sortable="asc" data-field="members">
+                            <div>Members <span class="psgrid-sort"></span></div>
+                        </th>
+                        <th sortable="none" data-field="plugin_manager">
+                            <div>Members <span class="psgrid-sort"></span></div>
+                        </th>
+                        <th sortable="none" data-field="primary_developer">
+                            <div>Members <span class="psgrid-sort"></span></div>
+                        </th>
+                        <th data-field="plugin_type">
+                            <div>Plugin type <span class="psgrid-sort"></span></div>
+                        </th>
+                        <th data-field="market_type">
+                            <div>Market type <span class="psgrid-sort"></span></div>
+                        </th>
+                        <th data-field="market_type2">
+                            <div>Market type2 <span class="psgrid-sort"></span></div>
+                        </th>
+                        <th data-field="market_type3">
+                            <div>Market type3 <span class="psgrid-sort"></span></div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody name="psgrid-table-body" class="psgrid-table-body"></tbody>
+
+            </table>
+        </div>
+        <div class="psgrid-paginator" name="psgrid-pager">
+            <div status="disabled">
+            </div>
+            <div status="active" data-index="1">1</div>
+            <div status="none" data-index="2">2</div>
+            <div status="none" data-index="3">3</div>
+            <div status="none" data-index="4">4</div>
+            <div status="active">
+            </div>
+        </div>
+
+        <template name="psgrid-row-template">
+            <tr class="psgrid-tbody-row">
+                <td unselectable="on"><a href="" name="members"></a></td>
+                <td unselectable="on">
+                    <img class="psgrid-image" name="plugin_manager_url" src="/pslib/image/person.png">
+                    <span name="plugin_manager"></span>
+                </td>
+                <td unselectable="on"><span name="primary_developer"></span></td>
+                <td unselectable="on"><span name="plugin_type"></span></td>
+                <td unselectable="on"><span name="market_type"></span></td>
+                <td unselectable="on"><span name="market_type2"></span></td>
+                <td unselectable="on"><span name="market_type3"></span></td>
+            </tr>
+        </template>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#grid").initGrid({
+                    dataEndPoint: '/api/getmembers',
+                    rows: [
+                        { members: '3M', plugin_manager: 'Jane Doe', primary_developer: 'John Smith', plugin_type: 'Widget', market_type: '3122674410004826e2302-b16363-8d612e5f448c489fb7d9809e0188a078@mg.expediamail.com;expedia@ar.expediamail.com', market_type2: 'Amazon distribution' },
+                        { members: '4P', plugin_manager: 'Alice Johnson', primary_developer: 'Robert Brown', plugin_type: 'Gadget', market_type: 'Walmart distribution', market_type2: 'Amazon distribution' },
+                        { members: '4P', plugin_manager: 'Alice Johnson', primary_developer: 'Robert Brown', plugin_type: 'Gadget', market_type: 'Walmart distribution', market_type2: 'Amazon distribution' }
+                    ],
+                    totalPages: 2,
+                    currentPage: 1,
+                    sortField: 'members',
+                    sortOrder: 'asc',
+                    bindData: function (rows, tbody, rtemplate) {
+                        $.each(rows, function (index, row) {
+                            const newRow = document.importNode(rtemplate, true);
+                            $(newRow).find('[name="members"]').text(row.members);
+                            $(newRow).find('[name="plugin_manager"]').text(row.plugin_manager);
+                            $(newRow).find('[name="primary_developer"]').text(row.primary_developer);
+                            $(newRow).find('[name="plugin_type"]').text(row.plugin_type);
+                            $(newRow).find('[name="market_type"]').text(row.market_type);
+                            $(newRow).find('[name="market_type2"]').text(row.market_type);
+                            $(newRow).find('[name="market_type3"]').text(row.market_type);
+                            tbody.append(newRow);
+                        });
+                    },
+                });
+
+
+                $('#grid').loadData();
+            });
+        </script>
+    </div>
+</div>
